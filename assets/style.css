@@ -1,0 +1,29 @@
+section{
+    margin: 20px 0px;
+}
+
+#forecastContainer{
+    display: flex;
+}
+
+#searchBtn{
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+#searchInput{
+    margin-top: 20px;
+}
+
+#searchFormHeader{
+    margin-top: 20px;
+}
+
+#currentWeatherCard{
+    margin-top: 20px;
+    border: 1px solid black;
+    padding-left: 7px;
+    font-size: large;
+}
