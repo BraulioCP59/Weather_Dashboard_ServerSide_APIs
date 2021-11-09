@@ -27,3 +27,15 @@ section{
     padding-left: 7px;
     font-size: large;
 }
+
+#recentSearches{
+    border-top: 3px solid grey;
+    margin-top: 5%;
+
+}
+
+.recentSearchItem{
+    width: 100%;
+    margin-top: 3%;
+    background-color:rgba(128, 128, 0, 0.712);
+}
