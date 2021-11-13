@@ -7,9 +7,10 @@ var recentSearchListEL = $("#recentSearches");
 
 //globals
 var searchHistory = [];
-
-
-
+const weatherKey = 'a8f0f5f5b1d6bdc3df4466ae6e70fc65';
+var weatherApiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid=${weatherKey}`
+const locationKey = 'AIzaSyBzDZ9FZrywEiWntD5JFfjbqrnEKXOENiM';
+let locationApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=Mountain+View,+CA&key=${locationKey}`;
 
 
 //function definitions
