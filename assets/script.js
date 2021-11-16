@@ -4,6 +4,7 @@ var citySearchFormEl = $("#citySearch");
 var searchInputEl = $("#searchInput");
 var recentSearchListEL = $("#recentSearches");
 var currentWeatherCardEl = $("#currentWeatherCard");
+var forecastContainer = $("#forecastContainer");
 
 
 //--------------------------Globals--------------------------------//
@@ -13,6 +14,7 @@ var weatherApiUrl = 'https://api.openweathermap.org/data/2.5/onecall?'; //exampl
 const locationKey = 'AIzaSyBzDZ9FZrywEiWntD5JFfjbqrnEKXOENiM';
 let locationBaseUrl = "https://maps.googleapis.com/maps/api/geocode/json?"; //examples https://maps.googleapis.com/maps/api/geocode/json?address=Mountain+View,+CA&key=key
 let forcastData;
+const day = dayjs().format('MM/DD/YYYY');
 
 
 //--------------------------Functions--------------------------------//
@@ -23,7 +25,7 @@ const generateWeather = async (location) => {
     const locationData = await fetch(locationBaseUrl + `address=${location},+CA&key=${locationKey}`).then(response => response.json());
     geoLocation = locationData.results[0].geometry.location;
 
-    forcastData = await fetch(weatherApiUrl + `lat=${geoLocation.lat}&lon=${geoLocation.lng}&exclude={part}&appid=${weatherKey}`).then(response => response.json());
+    forcastData = await fetch(weatherApiUrl + `lat=${geoLocation.lat}&lon=${geoLocation.lng}&exclude={part}&units=imperial&appid=${weatherKey}`).then(response => response.json());
     console.log(forcastData);
 }
 
@@ -33,15 +35,47 @@ function loadCurrentWeather ()
     const city = JSON.parse(localStorage.getItem("searchHistory"));
     console.log(city);
     currentWeatherCardEl.empty();
-    currentWeatherCardEl.append(                        `<div>
-                            <h1>${city[city.length - 1].toUpperCase()}</h1>
-                            <p>temp: ${forcastData.current.temp}</p>
-                            <p>Wind: ${forcastData.current.wind_speed}</p>
-                            <p>Humidity: ${forcastData.current.humidity}</p>
-                            <p>UV Index: ${forcastData.current.uvi}</p>
-                        </div>`);
+
+    if(forcastData.current.uvi > 6)
+    {
+        uVIndex = "severeUv";
+    }else if(forcastData.current.uvi >= 3 && forcastData.current.uvi <= 6)
+    {
+        uVIndex = "moderateUv";
+    }else
+    {
+        uVIndex = "favorableUv";
+    }
+
+    currentWeatherCardEl.append(`<div>
+                                    <h1>${city[city.length - 1].toUpperCase()} (${day})<img src = "https://openweathermap.org/img/wn/${forcastData.current.weather[0].icon}.png"></h1>
+                                    <p>Temp: ${forcastData.current.temp} &#8457;</p>
+                                    <p>Wind: ${forcastData.current.wind_speed} MPH</p>
+                                    <p>Humidity: ${forcastData.current.humidity} %</p>
+                                    <p>UV Index: <span id = "${uVIndex}">${forcastData.current.uvi}</span></p>
+                                </div>`);
 }
 
+function loadDailyForcast()
+{
+    const dailyWeather = forcastData.daily; 
+    forecastContainer.empty();
+
+    for(let i = 0; i < 5; i++)
+    {
+        console.log("test");
+        forecastContainer.append(`<div class="card dailyCards" style="width: 18rem;">
+                                    <div class="card-body">
+                                    <h5>${dayjs().add(i+1, 'day').format('MM/DD/YYYY')}</h5>
+                                    <img src = "https://openweathermap.org/img/wn/${dailyWeather[i].weather[0].icon}.png">
+                                    <p>Temp: ${dailyWeather[i].temp.day} &#8457;</p>
+                                    <p>Wind: ${dailyWeather[i].wind_speed} MPH</p>
+                                    <p>Humidity: ${dailyWeather[i].humidity} %</p>
+                                    </div>
+                                </div>`);
+
+    }
+}
 
 //store Search history
 function storeSearch()
@@ -92,6 +126,8 @@ citySearchFormEl.submit(async (event)=>{
     loadSearchHistory();
     await generateWeather(searchInputEl.val());
     loadCurrentWeather();
+    loadDailyForcast();
+
 
 });
 

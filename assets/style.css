@@ -2,6 +2,24 @@ section{
     margin: 20px 0px;
 }
 
+#favorableUv{
+    background-color: green;
+    color: white;
+    border-radius: 3px;
+}
+
+#moderateUv{
+    background-color: orange;
+    color: white;
+    border-radius: 3px;
+}
+
+#severeUv{
+    background-color: tomato;
+    color: white;
+    border-radius: 3px;
+}
+
 #forecastContainer{
     display: flex;
 }
@@ -38,4 +56,11 @@ section{
     width: 100%;
     margin-top: 3%;
     background-color:rgba(128, 128, 0, 0.712);
+}
+
+.dailyCards{
+    background-color:rgb(82, 135, 137);
+    color: white;
+    font-weight: bold;
+    margin: 0 15px;
 }
